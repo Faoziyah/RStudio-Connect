@@ -1,0 +1,106 @@
+pipeline {
+    agent any
+
+    environment {
+        SONARQUBE_SERVER = 'SonarQube'      // Replace with your SonarQube server configuration in Jenkins
+        TF_WORKSPACE = 'workspace'          // Terraform working directory
+        TF_VAR_ENV = 'prod'                // Example: Define your environment, like dev, prod
+    }
+
+    parameters {
+        // Parameter to allow user to choose whether to apply or destroy the infrastructure
+        choice(name: 'INFRA_ACTION', choices: ['apply', 'destroy'], description: 'Choose whether to apply or destroy the infrastructure.')
+    }
+
+    stages {
+        stage('git clone') {
+            steps {
+                script{
+                    git branch: 'main', credentialsId: 'githubcreds', url: 'https://github.com/Primus-Learning/jan-tf-jenkins.git'
+            
+                }
+            }
+        }
+
+        stage('Terraform Init') {
+            steps {
+                script {
+                    sh 'terraform init'
+                }
+            }
+        }
+
+        stage('Terraform Validate') {
+            steps {
+                script {
+                    sh 'terraform validate'
+                }
+            }
+        }
+
+        stage('SonarQube Analysis') {
+            steps {
+                withSonarQubeEnv(SONARQUBE_SERVER) {
+                    script {
+                        sh """
+                        sonar-scanner \
+                        -Dsonar.projectKey=terraform-project \
+                        -Dsonar.sources=. \
+                        -Dsonar.host.url=$SONARQUBE_SERVER \
+                        -Dsonar.terraform.reportPaths=sonar-report.json
+                        """
+                    }
+                }
+            }
+        }
+
+        stage('Quality Gate') {
+            steps {
+                script {
+                    timeout(time: 5, unit: 'MINUTES') {
+                        def qg = waitForQualityGate()
+                        if (qg.status != 'OK') {
+                            error "Pipeline failed due to SonarQube Quality Gate status: ${qg.status}"
+                        }
+                    }
+                }
+            }
+        }
+
+        stage('Apply Infrastructure') {
+            when {
+                expression { return params.INFRA_ACTION == 'apply' }
+            }
+            steps {
+                script {
+                    echo "Applying infrastructure..."
+                    sh 'terraform apply -auto-approve'
+                }
+            }
+        }
+
+        stage('Destroy Infrastructure') {
+            when {
+                expression { return params.INFRA_ACTION == 'destroy' }
+            }
+            steps {
+                script {
+                    echo "Destroying infrastructure..."
+                    sh 'terraform destroy -auto-approve'
+                }
+            }
+        }
+    }
+
+    post {
+        always {
+            echo 'Pipeline completed.'
+        }
+        success {
+            echo 'Pipeline succeeded!'
+        }
+        failure {
+            echo 'Pipeline failed!'
+        }
+    }
+}

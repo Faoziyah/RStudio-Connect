@@ -5,21 +5,21 @@ pipeline{
     }
     parameters{
         choice(name: 'action', choices: ['build', 'destroy'], description: 'Build Or Destroy Infrastructure')
-        string(name: 'ec2_ami_id', defaultValue: '', description: 'ami id ')
+        //string(name: 'ec2_ami_id', defaultValue: '', description: 'ami id ')
   }
   stages{
     stage("Clone and Update Tfvars"){
       steps{
         script{
             git branch: 'main', credentialsId: 'githubcreds', url: 'https://github.com/Primus-Learning/jan-tf-jenkins.git'
-            sh"""
-              echo "before update"
-              cat terraform.tfvars
+           // sh"""
+              ///echo "before update"
+             // cat terraform.tfvars
              
-              sed -i 's/AMI/${params.ec2_ami_id}/g' $WORKSPACE/terraform.tfvars
+              //sed -i 's/AMI/${params.ec2_ami_id}/g' $WORKSPACE/terraform.tfvars
 
-              cat terraform.tfvars
-            """
+             // cat terraform.tfvars
+            //"""
         }
       }
     }

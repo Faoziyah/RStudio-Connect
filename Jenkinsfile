@@ -2,16 +2,17 @@ pipeline{
   agent { label 'any'}
   tools {
         maven 'maven-3.9.9' 
-    }
+  }
     parameters{
         choice(name: 'action', choices: ['build', 'destroy'], description: 'Build Or Destroy Infrastructure')
         //string(name: 'ec2_ami_id', defaultValue: '', description: 'ami id ')
-  }
+    }
   stages{
     stage("Clone and Update Tfvars"){
       steps{
         script{
-            git branch: 'main', credentialsId: 'git-token', url: 'https://github.com/Faoziyah/RStudio-Connect.git'
+            git branch: 'main', credentialsId: 'admin', url: 'https://github.com/Faoziyah/RStudio-Connect.git'
+            sh "echo $(param.action)"
            // sh"""
               ///echo "before update"
              // cat terraform.tfvars
@@ -30,7 +31,7 @@ pipeline{
                     sh"mvn test"
                 }
             }
-        }
+    }
         stage("Maven Package"){
             steps{
                 sh"mvn clean package"

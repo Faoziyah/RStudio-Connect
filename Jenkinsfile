@@ -12,7 +12,7 @@ pipeline{
       steps{
         script{
             git branch: 'main', credentialsId: 'admin', url: 'https://github.com/Faoziyah/RStudio-Connect.git'
-            sh "echo ${param.action}"
+            sh "echo ${params.action}"
            // sh"""
               ///echo "before update"
              // cat terraform.tfvars

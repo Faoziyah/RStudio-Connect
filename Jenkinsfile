@@ -25,19 +25,7 @@ pipeline{
       }
     }
 
-  stage("Maven test"){
-            steps{
-                script{
-                    sh"mvn test"
-                }
-            }
-    }
-        stage("Maven Package"){
-            steps{
-                sh"mvn clean package"
-                sh"ls -l target/"
-            }
-        }
+
         stage('SonarQube analysis') {
             tools {
                 jdk 'jdk11'

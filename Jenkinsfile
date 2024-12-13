@@ -1,12 +1,12 @@
 pipeline{
-  agent { label 'any' }
+  agent any
   tools {
         maven 'maven-3.9.9' 
   }
-    parameters{
+  parameters{
         choice(name: 'action', choices: ['build', 'destroy'], description: 'Build Or Destroy Infrastructure')
         //string(name: 'ec2_ami_id', defaultValue: '', description: 'ami id ')
-    }
+  }
   stages{
     stage("Clone and Update Tfvars"){
       steps{

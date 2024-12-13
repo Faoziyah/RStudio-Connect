@@ -25,7 +25,23 @@ pipeline{
       }
     }
 
+stage('SonarQube Analysis') {
+            steps {
+                withSonarQubeEnv(sonar) {
+                    script {
+                        sh """
+                        sonar-scanner \
+                        -Dsonar.projectKey=jenkins-sonar \
+                        -Dsonar.sources=. \
+                        -Dsonar.host.url=sonar\
+                        -Dsonar.terraform.reportPaths=sonar-report.json
+                        """
+                    }
+                }
+            }
+        }
 
+    
         stage('SonarQube analysis') {
             tools {
                 jdk 'jdk11'

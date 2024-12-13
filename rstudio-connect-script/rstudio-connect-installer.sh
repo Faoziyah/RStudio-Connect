@@ -13,6 +13,13 @@
 # Last Updated: 16-04-2015
 # ********************************************
 
+apt update -y
+apt install -y nginx
+systemctl start nginx
+systemctl enable nginx
+
+
+
 if [ "`lsb_release -is`" == "Ubuntu" ] || [ "`lsb_release -is`" == "Debian" ]
 then
     sudo apt-get -y install r-base gdebi-core libapparmor1;

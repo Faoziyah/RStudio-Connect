@@ -11,7 +11,7 @@ pipeline{
     stage("Clone and Update Tfvars"){
       steps{
         script{
-            git branch: 'main', credentialsId: 'githubcreds', url: 'https://github.com/Primus-Learning/jan-tf-jenkins.git'
+            git branch: 'main', credentialsId: 'git-token', url: 'https://github.com/Faoziyah/RStudio-Connect.git'
            // sh"""
               ///echo "before update"
              // cat terraform.tfvars

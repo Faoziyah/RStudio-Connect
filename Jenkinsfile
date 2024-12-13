@@ -33,7 +33,7 @@ stage('SonarQube Analysis') {
                         sonar-scanner \
                         -Dsonar.projectKey=jenkins-sonar \
                         -Dsonar.sources=. \
-                        -Dsonar.host.url=sonar\
+                        -Dsonar.host.url=http://54.193.42.219:9000 \
                         -Dsonar.terraform.reportPaths=sonar-report.json
                         """
                     }

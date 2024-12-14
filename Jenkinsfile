@@ -32,7 +32,7 @@ pipeline{
                 jdk 'jdk11'
             }
             steps {
-                 withSonarQubeEnv('sonar') {
+                 withSonarQubeEnv('sonarserver') {
                      sh 'mvn sonar:sonar'
                  }
                // echo "sonar passed"

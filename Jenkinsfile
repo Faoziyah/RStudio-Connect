@@ -2,7 +2,7 @@ pipeline{
   agent any
   tools {
        
-        terraform 'terraForm'
+        terraform 'terraform'
   }
   parameters{
         choice(name: 'action', choices: ['build', 'destroy'], description: 'Build Or Destroy Infrastructure')

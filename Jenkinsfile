@@ -1,7 +1,7 @@
 pipeline{
   agent any
   tools {
-        maven 'maven-3.9.9' 
+       
         terraform 'terraForm'
   }
   parameters{
@@ -26,19 +26,15 @@ pipeline{
       }
     }
 
-
-    
-        stage('SonarQube analysis') {
-            tools {
-                jdk 'jdk11'
-            }
+stage('SonarQube Analysis') {
             steps {
-                 withSonarQubeEnv('sonarserver') {
-                     sh 'mvn sonar:sonar'
-                 }
-               // echo "sonar passed"
+                withSonarQubeEnv('SonarQube') {
+                    sh 'sonar-scanner -Dsonar.projectKey=jenkins-sonar -Dsonar.sourceEncoding=UTF-8 -Dsonar.language=terraform'
+                }
             }
         }
+    
+      
         stage("Quality Gate") {
             steps {
                  timeout(time: 1, unit: 'HOURS') {

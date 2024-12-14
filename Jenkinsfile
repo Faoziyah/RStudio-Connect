@@ -29,7 +29,7 @@ pipeline{
 stage('SonarQube Analysis') {
             steps {
                 withSonarQubeEnv('sonar') {
-                    sh 'sonar-scanner -Dsonar.projectKey=jenkins-sonar -Dsonar.sourceEncoding=UTF-8 -Dsonar.language=terraform'
+                    sh 'sonar -Dsonar.projectKey=jenkins-sonar -Dsonar.sourceEncoding=UTF-8 -Dsonar.language=terraform'
                 }
             }
         }

@@ -17,7 +17,7 @@ module "security_groups" {
 module "rstudio-connect-instance" {
   source                    = "./rstudio-connect-instance"
   ami_id                    = var.ec2_ami_id
-  instance_type             = "t2.medium"
+  instance_type             = "t2.micro"
   tag_name                  = "rstudio_connect:Ubuntu Linux EC2"
   public_key                = var.public_key
   subnet_id                 = tolist(module.networking.rstudio_connect_public_subnets)[0]

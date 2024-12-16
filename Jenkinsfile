@@ -15,19 +15,22 @@ pipeline{
             git branch: 'main', credentialsId: 'admin', url: 'https://github.com/Faoziyah/RStudio-Connect.git'
             echo "action: ${params.action}"
            // sh"""
-              ///echo "before update"
+             ///echo "before update"
              // cat terraform.tfvars
-             
-              //sed -i 's/AMI/${params.ec2_ami_id}/g' $WORKSPACE/terraform.tfvars
-
+             //sed -i 's/AMI/${params.ec2_ami_id}/g' $WORKSPACE/terraform.tfvars
              // cat terraform.tfvars
-            //"""
+             //"""
         }
       }
     }
 
 stage('SonarQube Analysis') {
             steps {
+              withSonarQubeEnv() {
+                sh "ls ${scannerHome}"
+                sh "echo ${scannerHome}"
+              }
+                            
                 withSonarQubeEnv('sonar') {
                     sh 'sonar -Dsonar.projectKey=jenkins-sonar -Dsonar.sourceEncoding=UTF-8 -Dsonar.language=terraform'
                 }

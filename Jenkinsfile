@@ -26,7 +26,7 @@ pipeline{
 
 stage('SonarQube Analysis') {
             steps {
-              withSonarQubeEnv() {
+              withSonarQubeEnv(sonar) {
                 sh "ls ${scannerHome}"
                 sh "echo ${scannerHome}"
               }

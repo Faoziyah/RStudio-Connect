@@ -31,9 +31,7 @@ stage('SonarQube Analysis') {
                 sh "echo ${scannerHome}"
               }
                             
-                withSonarQubeEnv('sonar') {
-                    sh 'sonar -Dsonar.projectKey=jenkins-sonar -Dsonar.sourceEncoding=UTF-8 -Dsonar.language=terraform'
-                }
+            
             }
         }
     

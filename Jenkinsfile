@@ -4,6 +4,11 @@ pipeline{
        
         terraform 'terraform'
   }
+   environment {
+        SONARQUBE_SERVER = 'sonar
+        SONARQUBE_PROJECT_KEY = 'jenkins-sonar'
+        TERRAFORM_DIR = 'terraform'
+    }
   parameters{
         choice(name: 'action', choices: ['build', 'destroy'], description: 'Build Or Destroy Infrastructure')
         //string(name: 'ec2_ami_id', defaultValue: '', description: 'ami id ')
@@ -24,12 +29,17 @@ pipeline{
       }
     }
 
-stage('SonarQube Analysis') {
+    stage('Static Code Analysis with SonarQube') {
             steps {
-                withSonarQubeEnv('sonar') {
-                    sh 'sonar-scanner -Dsonar.projectKey=jenkins-sonar -Dsonar.sourceEncoding=UTF-8 -Dsonar.language=terraform'
-                }          
-            
+                withSonarQubeEnv(env.SONARQUBE_SERVER) {
+                    script {
+                        sh "sonar-scanner \
+                            -Dsonar.projectKey=${SONARQUBE_PROJECT_KEY} \
+                            -Dsonar.sources=${env.TERRAFORM_DIR} \
+                            -Dsonar.exclusions=**/*.tfstate,**/*.tfstate.backup,**/.terraform/** \
+                            -Dsonar.language=terraform"
+                    }
+                }
             }
         }
     

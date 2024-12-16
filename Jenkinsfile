@@ -26,11 +26,9 @@ pipeline{
 
 stage('SonarQube Analysis') {
             steps {
-              withSonarQubeEnv(sonar) {
-                sh "ls ${scannerHome}"
-                sh "echo ${scannerHome}"
-              }
-                            
+                withSonarQubeEnv('sonar') {
+                    sh 'sonar-scanner -Dsonar.projectKey=jenkins-sonar -Dsonar.sourceEncoding=UTF-8 -Dsonar.language=terraform'
+                }          
             
             }
         }

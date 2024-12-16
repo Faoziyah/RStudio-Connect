@@ -5,7 +5,7 @@ pipeline{
         terraform 'terraform'
   }
    environment {
-        SONARQUBE_SERVER = 'sonar
+        SONARQUBE_SERVER = 'sonar'
         SONARQUBE_PROJECT_KEY = 'jenkins-sonar'
         TERRAFORM_DIR = 'terraform'
     }

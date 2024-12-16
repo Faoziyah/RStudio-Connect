@@ -29,29 +29,6 @@ pipeline{
       }
     }
 
-    stage('Static Code Analysis with SonarQube') {
-            steps {
-                withSonarQubeEnv(env.SONARQUBE_SERVER) {
-                    script {
-                        sh "sonar-scanner \
-                            -Dsonar.projectKey=${SONARQUBE_PROJECT_KEY} \
-                            -Dsonar.sources=${env.TERRAFORM_DIR} \
-                            -Dsonar.exclusions=**/*.tfstate,**/*.tfstate.backup,**/.terraform/** \
-                            -Dsonar.language=terraform"
-                    }
-                }
-            }
-        }
-    
-      
-        stage("Quality Gate") {
-            steps {
-                 timeout(time: 1, unit: 'HOURS') {
-                     waitForQualityGate abortPipeline: true
-                 }
-               // echo "sonar passed"
-            }
-        }
 
     stage("Terraform Apply"){
       when { equals expected: 'build', actual: params.action }

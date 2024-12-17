@@ -1,0 +1,28 @@
+pipeline {
+    agent any
+
+    triggers {
+        cron('H 7 * * 1')  // Cron expression to run the job every Monday at 7 AM 
+    }
+
+    stages {
+        stage('Start RStudio Connect') {
+            steps {
+                script {
+                    echo "Starting RStudio Connect instance..."
+
+                    sh """
+                    aws ec2 start-instances --instance-ids i-0752aa53a474d2e3b --region us-west-2
+                    """
+
+                }
+            }
+        }
+    }
+
+    post {
+        always {
+            echo 'Start process completed.'
+        }
+    }
+}

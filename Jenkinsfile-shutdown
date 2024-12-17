@@ -1,0 +1,29 @@
+pipeline {
+    agent any
+
+    triggers {
+        cron('H 18 * * 5')  // Cron expression to run the job every Friday at 6 PM 
+    }
+
+    stages {
+        stage('Shutdown RStudio Connect') {
+            steps {
+                script {
+                    echo "Shutting down RStudio Connect instance..."
+
+                    sh """
+                    aws ec2 stop-instances --instance-ids i-0752aa53a474d2e3b --region us-west-2
+                    """
+
+                }
+            }
+        }
+    }
+
+    post {
+        always {
+            echo 'Shutdown process completed.'
+        }
+    }
+}
+
